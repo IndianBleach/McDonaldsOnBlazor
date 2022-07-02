@@ -8,6 +8,8 @@
 
 @code {
 
+     IEnumerable<MenuItemDto> popularItems = new List<MenuItemDto>();
+
     IEnumerable<MenuItemDto> catalogItems = new List<MenuItemDto>();
     int? _activeItemId = null;
 }
@@ -19,13 +21,13 @@
       <h1 style="margin: 0rem; font-family: 'Archivo Black', sans-serif;">
         McDonald's
       </h1>
-      <p class="t-lg text-muted">App by @@IndianBleach</p>
+      <p class="t-lg text-gray">App by @@IndianBleach</p>
     </header>
 
     <div class="col-12 d-flex justify-content-center">
       <div class="col-10 d-flex col-xl-9">
         <div class="col-3 p-2">
-          <section class="overlfow-hidden bg-black radius-md p-3 ps-4 pe-4">
+          <section class="overlfow-hidden bg-night  radius-md p-3 ps-4 pe-4">
             <label class="t-section-label">Корзина</label>
             <div id="basketContainer" style="min-height: 420px;" class="col-12">
               <div
@@ -33,7 +35,7 @@
                 style="min-height: inherit;"
                 class="d-none d-flex justify-content-center align-items-center"
               >
-                <label class="text-center t-section-label-big text-muted">
+                <label class="text-center t-section-label-big text-gray">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"
@@ -94,8 +96,8 @@
                         @item.Name
                       </h3>
                       @if (item.WithConfigureOptions)
-                      {<label class="t-md text-muted">Есть доп. опции</label>}
-                      else {<label class="t-md text-muted">Без опций</label>}
+                      {<label class="t-md text-gray">Есть доп. опции</label>}
+                      else {<label class="t-md text-gray">Без опций</label>}
                       <br />
                       <label style="font-weight: 400;" class="t-lg pt-1"
                         >@item.Price Руб.</label
@@ -107,7 +109,7 @@
           </div>
         </div>
         <div class="col-3">
-          <section class="overlfow-hidden bg-black radius-md p-3">
+          <section class="overlfow-hidden bg-night  radius-md p-3">
             <div class="d-flex justify-content-around">
               <label class="t-section-label">Готовятся </label>
               <label class="t-section-label">Готовы </label>
@@ -138,7 +140,7 @@
             </div>
           </section>
           <section
-            class="mt-3 overlfow-hidden bg-black radius-md p-3 ps-4 pe-4"
+            class="mt-3 overlfow-hidden bg-night  radius-md p-3 ps-4 pe-4"
           >
             <label class="t-section-label">Популярное</label>
             <div
@@ -150,10 +152,14 @@
                 style="overflow-y: scroll !important; height: 366px;"
                 class="scroll-cutsom"
               >
-                <section class="col-12 d-flex align-items-center">
-                  <img src="" height="77" />
-                  <label class="t-title-sm">Mac Chiken</label>
-                </section>
+                @foreach (MenuItemDto item in popularItems)
+                {
+                   <section class="col-12 d-flex align-items-center">
+                      <img src="/media/menuItems/@item.ImageSrcName" height="66" />
+                      <label class="ps-2 t-title-sm">@item.Name</label>
+                   </section>             
+                }
+                
               </div>
             </div>
           </section>
@@ -163,7 +169,7 @@
 
 @code {
 
-    
+
 
     private void ShowItemDetailWindow(int itemId)
     {
@@ -175,5 +181,6 @@
     protected override async Task OnInitializedAsync()
     {
         catalogItems = menuService.GetMenuItemsPerPage();
+        popularItems = await menuService.GetPopularItems();
     }
 }

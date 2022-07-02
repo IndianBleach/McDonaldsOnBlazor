@@ -74,9 +74,28 @@ namespace McDonaldsOnWeb.Application.Services.MenuItemService
             return dtos;
         }
 
-        public ICollection<MenuItemDto> GetPopularItems()
+        public async Task<ICollection<MenuItemDto>> GetPopularItems()
         {
-            throw new NotImplementedException();
+            ICollection<MenuItemDto>? dtos = await _cashe
+                .GetRecordAsync<ICollection<MenuItemDto>>("PopularMenuItems");
+
+            if (dtos == null)
+            {
+                string query = @"select 
+	                Id,
+	                ItemPrice as Price,
+	                ItemImage as ImageSrcName,
+	                ItemName as Name
+                from MenuItem";
+
+                dtos = _appContext.DbConnection.Query<MenuItemDto>(query)
+                    .Take(5)
+                    .ToList();
+
+                await _cashe.SetRecordAsync("PopularMenuItems", dtos, TimeSpan.FromMinutes(2));
+            }
+
+            return dtos;
         }
     }
 }

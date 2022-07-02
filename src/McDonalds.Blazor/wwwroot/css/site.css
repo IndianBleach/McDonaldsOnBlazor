@@ -14,16 +14,18 @@
     font-size: 20px;
 }
 
-.text-muted {
+.text-gray {
     color: gray !important;
 }
 
-.bg-black {
+
+.bg-night {
     background: #121212 !important;
+    background-color: #121212 !important;
 }
 
 .radius-md {
-    border-radius: 20px;
+    border-radius: 20px !important;
 }
 
 .t-section-label {

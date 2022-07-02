@@ -12,7 +12,7 @@ namespace McDonaldsOnWeb.Application.Services.MenuItemService
     public interface IMenuItemService
     {
         //redis
-        public ICollection<MenuItemDto> GetPopularItems();
+        public Task<ICollection<MenuItemDto>> GetPopularItems();
 
         public MenuItemDetailDto? GetItemDetailOrDefault(int? itemId);
         public ICollection<MenuItemDto> GetMenuItemsPerPage();

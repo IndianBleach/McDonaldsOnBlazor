@@ -1,4 +1,4 @@
-using McDonalds.Blazor.Data;
+
 using McDonaldsOnWeb.Web.Configuration;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 
 builder.Services.UseTransientDbContext(builder.Configuration
@@ -20,7 +19,7 @@ builder.Services.ConfigureCoreServices();
 builder.Services.AddStackExchangeRedisCache(opt =>
 {
     opt.Configuration = builder.Configuration.GetConnectionString("ConnectionStringRedis");
-    opt.InstanceName = "McDonaldsRedisDb";
+    opt.InstanceName = "McDonaldsRedis";    
 });
 
 
