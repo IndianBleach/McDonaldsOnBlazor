@@ -1,0 +1,112 @@
+﻿@using McDonaldsOnWeb.Application.Services.MenuItemService
+@using McDonaldsOnWeb.Common.DTOs.MenuItemDTOs
+
+
+
+@if (detailItem != null)
+{
+    <div
+      class="active col-12 d-flex align-items-center justify-content-center"
+      id="zoomBox"
+    >
+      <div>
+        <div class="mb-1 pe-1 text-end">
+          <button
+            id="closeClientWindowBtn"
+            type="button"
+            class="text-white btn-close btn-close-white"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="p-3 pb-4" id="clientWindow">
+          <div class="text-center">
+            <div class="pt-2">
+              <img src="/media/menuItems/@detailItem.ImageSrcName" height="126" />
+            </div>
+            <label
+              style="font-size: 24px; line-height: 29px; font-weight: 500;"
+              class="text-dark"
+              >@detailItem.Name</label
+            >
+            <p
+              style="color: #878787 !important; font-weight: 400;"
+              class="pt-2 text-muted"
+            >
+              @detailItem.Description
+            </p>
+            <form class="col-12 justify-content-center flex-wrap d-flex">
+              @foreach (var item in detailItem.OptionIngredients)
+              {
+                    <div class="col-10 text-start form-check form-switch">
+                    <input                      
+                      class="form-check-input"
+                      type="checkbox"
+                      id="flexSwitchCheckDefault"
+                    />
+                    <div>
+                        <label
+                      style="font-weight: 500;"
+                      class="text-dark t-md form-check-label"
+                      for="flexSwitchCheckDefault"
+                      >+ @item.Name</label
+                    >
+                    <br />
+                      <span style="font-size: 12px;" class="text-muted"
+                        >+ @item.Price руб.</span
+                      >
+                    </div>
+                  </div>     
+              }
+              <div class="col-10">
+                <hr class="text-dark mb-0" />
+                <label
+                  style="font-size: 24px; line-height: 29px; font-weight: 500;"
+                  class="pt-3 text-dark"
+                  >@detailItem.Price Руб.</label
+                >
+                <hr class="text-dark mb-3" />
+                <button class="col-12 btn btn-primary radius-md">
+                  Добавить
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+}
+else
+{
+    <div
+      class="col-12 d-flex align-items-center justify-content-center"
+      id="zoomBox"
+    >
+      <div>
+        <div class="mb-1 pe-1 text-end">
+          <button
+            id="closeClientWindowBtn"
+            type="button"
+            class="text-white btn-close btn-close-white"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="d-none p-3 pb-4" id="clientWindow">
+        </div>
+      </div>
+    </div>
+}
+
+
+@inject IMenuItemService menuService;
+
+@code {
+    MenuItemDetailDto? detailItem = null;
+
+    protected override void OnParametersSet()
+    {
+        detailItem = menuService.GetItemDetailOrDefault(ItemId);
+    }
+
+    [Parameter]
+    public int? ItemId { get; set; }
+}

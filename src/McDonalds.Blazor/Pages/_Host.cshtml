@@ -1,0 +1,24 @@
+﻿@page "/"
+@namespace McDonalds.Blazor.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+}
+
+<component type="typeof(App)" render-mode="ServerPrerendered" />
+
+<script>
+        console.log($("article"))
+
+        $("#closeClientWindowBtn").on("click", (e) => {
+          console.log(e.target);
+          $("#clientWindow").addClass("d-none");
+          $("#zoomBox").removeClass("active");
+        });
+
+        $("article").on("click", (e) => {
+          console.log(e.target);
+          $("#clientWindow").removeClass("d-none");
+          $("#zoomBox").addClass("active");
+        });
+    </script>

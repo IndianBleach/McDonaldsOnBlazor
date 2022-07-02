@@ -1,0 +1,179 @@
+﻿@page "/"
+@using McDonaldsOnWeb.Application.Services.MenuItemService
+@using McDonaldsOnWeb.Common.Entities.ItemEntity
+
+<PageTitle>McDonaldsOnBlazor - App by @@IndianBleach</PageTitle>
+
+@inject IMenuItemService menuService;
+
+@code {
+
+    IEnumerable<MenuItemDto> catalogItems = new List<MenuItemDto>();
+    int? _activeItemId = null;
+}
+
+
+    <ItemDetailWindow ItemId="@_activeItemId"></ItemDetailWindow>
+
+    <header class="col-12 text-center p-4">
+      <h1 style="margin: 0rem; font-family: 'Archivo Black', sans-serif;">
+        McDonald's
+      </h1>
+      <p class="t-lg text-muted">App by @@IndianBleach</p>
+    </header>
+
+    <div class="col-12 d-flex justify-content-center">
+      <div class="col-10 d-flex col-xl-9">
+        <div class="col-3 p-2">
+          <section class="overlfow-hidden bg-black radius-md p-3 ps-4 pe-4">
+            <label class="t-section-label">Корзина</label>
+            <div id="basketContainer" style="min-height: 420px;" class="col-12">
+              <div
+                id="basketEmptyNotify"
+                style="min-height: inherit;"
+                class="d-none d-flex justify-content-center align-items-center"
+              >
+                <label class="text-center t-section-label-big text-muted">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    fill="currentColor"
+                    class="text-white mb-2 bi bi-basket3"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"
+                    />
+                  </svg>
+                  <br />
+                  Корзина пустая, <br />
+                  добавьте что-нибудь
+                </label>
+              </div>
+              <div
+                style="overflow-y: scroll !important; height: 366px;"
+                class="scroll-cutsom"
+              >
+                <section class="col-12 d-flex align-items-center">
+                  <img src="" height="77" />
+                  <label class="t-title-sm">Mac Chiken</label>
+                  <button
+                    type="button"
+                    class="ms-xl-1 btn-close btn-close-white"
+                    aria-label="Close"
+                  ></button>
+                </section>
+              </div>
+              <div class="p-3 pb-0 border-top">
+                <label class="t-lg t-title"
+                  >Итого:
+                  <span style="font-weight: 300;" id="totalBasketPriceSpan"
+                    >8929 Руб.</span
+                  ></label
+                >
+                <button class="mt-3 col-12 btn btn-primary radius-md">
+                  Оплатить
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="col">
+          <div class="p-2 col-12 d-flex flex-wrap">
+
+            @foreach (MenuItemDto item in catalogItems)
+            {
+                <article @onclick="() => ShowItemDetailWindow(item.Id)" class="card_article_hover col-12 col-lg-6 col-xl-4 p-2">
+                  <div style="height: 300px;" class="col-12">
+                    <div class="col-12 d-flex justify-content-center">
+                      <img src="/media/menuItems/@item.ImageSrcName" class="col-8 col-lg-10" />
+                    </div>
+                    <div class="col-12 text-center">
+                      <h3 class="t-title" style="font-weight: 300;">
+                        @item.Name
+                      </h3>
+                      @if (item.WithConfigureOptions)
+                      {<label class="t-md text-muted">Есть доп. опции</label>}
+                      else {<label class="t-md text-muted">Без опций</label>}
+                      <br />
+                      <label style="font-weight: 400;" class="t-lg pt-1"
+                        >@item.Price Руб.</label
+                      >
+                    </div>
+                  </div>
+                </article>
+            }
+          </div>
+        </div>
+        <div class="col-3">
+          <section class="overlfow-hidden bg-black radius-md p-3">
+            <div class="d-flex justify-content-around">
+              <label class="t-section-label">Готовятся </label>
+              <label class="t-section-label">Готовы </label>
+            </div>
+            <div id="queueContainer" class="pb-3 col-12">
+              <div style="height: 186px;" class="pb-2 pt-3 d-flex col-12">
+                <div
+                  style="height: 186px; overflow-y: scroll;"
+                  class="scroll-cutsom col-6 pe-1 border-end text-center"
+                >
+                  <div class="mb-1">
+                    <label class="t-smoke t-order-number">
+                      SM902
+                    </label>
+                  </div>
+                </div>
+                <div
+                  style="height: 186px; overflow-y: scroll;"
+                  class="scroll-cutsom text-center col-6 ps-1"
+                >
+                  <div class="mb-1">
+                    <label class="t-smoke t-order-number">
+                      SM902
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section
+            class="mt-3 overlfow-hidden bg-black radius-md p-3 ps-4 pe-4"
+          >
+            <label class="t-section-label">Популярное</label>
+            <div
+              id="popularContainer"
+              style="min-height: 340px;"
+              class="col-12"
+            >
+              <div
+                style="overflow-y: scroll !important; height: 366px;"
+                class="scroll-cutsom"
+              >
+                <section class="col-12 d-flex align-items-center">
+                  <img src="" height="77" />
+                  <label class="t-title-sm">Mac Chiken</label>
+                </section>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+@code {
+
+    
+
+    private void ShowItemDetailWindow(int itemId)
+    {
+        _activeItemId = itemId;
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        catalogItems = menuService.GetMenuItemsPerPage();
+    }
+}

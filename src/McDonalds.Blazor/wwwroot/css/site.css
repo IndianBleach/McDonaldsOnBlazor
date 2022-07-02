@@ -1,0 +1,120 @@
+.t-sm {
+    font-size: 14px;
+}
+
+.t-md {
+    font-size: 16px;
+}
+
+.t-lg {
+    font-size: 18px;
+}
+
+.t-xl {
+    font-size: 20px;
+}
+
+.text-muted {
+    color: gray !important;
+}
+
+.bg-black {
+    background: #121212 !important;
+}
+
+.radius-md {
+    border-radius: 20px;
+}
+
+.t-section-label {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.t-section-label-big {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.t-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.t-title-sm {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.border-top {
+    border-top: 1px solid rgb(97, 97, 97) !important;
+}
+
+.border-end {
+    border-right: 1px solid rgb(97, 97, 97) !important;
+}
+
+.btn-primary {
+    background-color: #5695ff !important;
+    font-weight: 500 !important;
+    border-color: #78a0e3 !important;
+}
+
+    .btn-primary:hover {
+        background-color: #5695ff !important;
+    }
+
+.t-smoke {
+    color: rgb(179, 179, 179) !important;
+}
+
+.scroll-cutsom::-webkit-scrollbar {
+    width: 6px; /* ширина scrollbar */
+    border-radius: 9px;
+}
+
+.scroll-cutsom::-webkit-scrollbar-track {
+    background: rgb(49, 49, 49); /* цвет дорожки */
+    border-radius: 9px;
+}
+
+.scroll-cutsom::-webkit-scrollbar-thumb {
+    background-color: rgb(29, 29, 29); /* цвет плашки */
+    border-radius: 20px; /* закругления плашки */
+}
+
+.card_article_hover:hover {
+    cursor: pointer;
+}
+
+    .card_article_hover:hover img {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .card_article_hover:hover img {
+        transform: scale(1.1);
+    }
+
+#zoomBox {
+    display: none !important;
+    position: fixed;
+    background-color: #29373ecc;
+    z-index: 1;
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+}
+
+    #zoomBox.active {
+        display: flex !important;
+    }
+
+#clientWindow {
+    width: 298px;
+    background-color: white;
+    border-radius: 19px;
+}
+
+.t-order-number {
+    font-family: "Archivo Black", sans-serif;
+}
