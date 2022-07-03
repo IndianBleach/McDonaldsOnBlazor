@@ -1,4 +1,5 @@
 ﻿@using McDonaldsOnWeb.Application.Services.MenuItemService
+@using McDonaldsOnWeb.Common.DTOs.BasketDTOs
 @using McDonaldsOnWeb.Common.DTOs.MenuItemDTOs
 
 
@@ -12,6 +13,7 @@
       <div>
         <div class="mb-1 pe-1 text-end">
           <button
+            @onclick="() => CloseItemDetailWindow()"
             id="closeClientWindowBtn"
             type="button"
             class="text-white btn-close btn-close-white"
@@ -34,11 +36,12 @@
             >
               @detailItem.Description
             </p>
-            <form class="col-12 justify-content-center flex-wrap d-flex">
-              @foreach (var item in detailItem.OptionIngredients)
+            <div class="col-12 justify-content-center flex-wrap d-flex">
+              @foreach (MenuItemOptionIngredientDto item in detailItem.OptionIngredients)
               {
                     <div class="col-10 text-start form-check form-switch">
-                    <input                      
+                    <input 
+                      @onchange="() => ToggleActiveItemIngredient(item)"
                       class="form-check-input"
                       type="checkbox"
                       id="flexSwitchCheckDefault"
@@ -62,14 +65,14 @@
                 <label
                   style="font-size: 24px; line-height: 29px; font-weight: 500;"
                   class="pt-3 text-dark"
-                  >@detailItem.Price Руб.</label
+                  >@activeDto.MenuItem.Price Руб.</label
                 >
                 <hr class="text-dark mb-3" />
-                <button class="col-12 btn btn-primary radius-md">
+                <button @onclick="() => AddItemToBasket()" class="col-12 btn btn-primary radius-md">
                   Добавить
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -83,7 +86,7 @@ else
     >
       <div>
         <div class="mb-1 pe-1 text-end">
-          <button
+          <button            
             id="closeClientWindowBtn"
             type="button"
             class="text-white btn-close btn-close-white"
@@ -100,13 +103,82 @@ else
 @inject IMenuItemService menuService;
 
 @code {
+
+    public BasketItemDto activeDto = new BasketItemDto()
+    {
+    };
+
+    private void ToggleActiveItemIngredient(MenuItemOptionIngredientDto ingredient)
+    {
+        SelectedItemOptionIngredientDto? getOptionInActiveItem = activeDto.OptionIngredients
+            .FirstOrDefault(x => x.Id.Equals(ingredient.Id));
+
+        if (getOptionInActiveItem != null)
+        {
+            if (getOptionInActiveItem.IsAppendToMenuItem == true)
+            {
+                getOptionInActiveItem.IsAppendToMenuItem = false;
+                activeDto.MenuItem.Price -= ingredient.Price;
+            }
+            else
+            {
+                getOptionInActiveItem.IsAppendToMenuItem = true;
+                activeDto.MenuItem.Price += ingredient.Price;
+            }
+        }     
+
+    }
+
+
+    private void AddItemToBasket()
+    {
+        BasketItems.Add(activeDto);
+        activeDto = new BasketItemDto() { };
+        CloseItemDetailWindow();
+    }
+
+
+    private void CloseItemDetailWindow()
+    {
+        detailItem = null;
+        ItemId = null;
+        OnClickRefreshState.InvokeAsync();  
+    }
+
+
     MenuItemDetailDto? detailItem = null;
 
     protected override void OnParametersSet()
     {
         detailItem = menuService.GetItemDetailOrDefault(ItemId);
+
+        if (detailItem != null)
+        {
+            activeDto.MenuItem = new McDonaldsOnWeb.Common.Entities.ItemEntity.MenuItemDto()
+            {
+                Id = detailItem.Id,
+                ImageSrcName = detailItem.ImageSrcName,
+                WithConfigureOptions = detailItem.OptionIngredients.Count > 0,
+                Name = detailItem.Name,
+                Price = detailItem.Price
+            };
+
+            activeDto.OptionIngredients = detailItem.OptionIngredients
+            .Select(x => new SelectedItemOptionIngredientDto()
+            {
+                Id = x.Id,
+                IsAppendToMenuItem = false
+            })
+            .ToList();
+        }
     }
 
     [Parameter]
     public int? ItemId { get; set; }
+
+    [Parameter]
+    public ICollection<BasketItemDto> BasketItems { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickRefreshState { get; set; }
 }

@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using McDonaldsOnWeb.Application.Services.MenuItemService
+@using McDonaldsOnWeb.Common.DTOs.BasketDTOs
 @using McDonaldsOnWeb.Common.Entities.ItemEntity
 
 <PageTitle>McDonaldsOnBlazor - App by @@IndianBleach</PageTitle>
@@ -8,14 +9,26 @@
 
 @code {
 
-     IEnumerable<MenuItemDto> popularItems = new List<MenuItemDto>();
+
+    private void RefreshState() {
+        _activeItemId = null;
+        StateHasChanged(); 
+    }
+
+    IEnumerable<MenuItemDto> popularItems = new List<MenuItemDto>();
 
     IEnumerable<MenuItemDto> catalogItems = new List<MenuItemDto>();
     int? _activeItemId = null;
+
+    ICollection<BasketItemDto> basketItems = new List<BasketItemDto>();
+
+    
+
 }
 
 
-    <ItemDetailWindow ItemId="@_activeItemId"></ItemDetailWindow>
+    <ItemDetailWindow OnClickRefreshState="@RefreshState" BasketItems="@basketItems" ItemId="@_activeItemId"></ItemDetailWindow>
+
 
     <header class="col-12 text-center p-4">
       <h1 style="margin: 0rem; font-family: 'Archivo Black', sans-serif;">
@@ -57,23 +70,33 @@
                 style="overflow-y: scroll !important; height: 366px;"
                 class="scroll-cutsom"
               >
-                <section class="col-12 d-flex align-items-center">
-                  <img src="" height="77" />
-                  <label class="t-title-sm">Mac Chiken</label>
-                  <button
-                    type="button"
-                    class="ms-xl-1 btn-close btn-close-white"
-                    aria-label="Close"
-                  ></button>
-                </section>
+                @foreach (BasketItemDto item in basketItems)
+                {
+                    <section class="col-12 d-flex align-items-center">
+                      <img src="/media/menuItems/@item.MenuItem.ImageSrcName" height="66" />
+                      <div>
+                        <label class="t-title-sm">@item.MenuItem.Name</label>
+                        <br />
+                        <span class="t-sm text-gray">
+                            + @item.OptionIngredients.Where(x => x.IsAppendToMenuItem == true).Count() 
+                            опции
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        class="ms-xl-1 btn-close btn-close-white"
+                        aria-label="Close"
+                      ></button>
+                    </section>            
+                }
               </div>
               <div class="p-3 pb-0 border-top">
-                <label class="t-lg t-title"
-                  >Итого:
-                  <span style="font-weight: 300;" id="totalBasketPriceSpan"
-                    >8929 Руб.</span
-                  ></label
-                >
+                <label class="t-lg t-title">
+                    Итого:
+                  <span style="font-weight: 300;" id="totalBasketPriceSpan">
+                      @basketItems.Sum(x => x.MenuItem.Price) Руб.
+                      </span>
+                 </label>
                 <button class="mt-3 col-12 btn btn-primary radius-md">
                   Оплатить
                 </button>
@@ -170,12 +193,16 @@
 @code {
 
 
+    private void SendBasketAfterPay()
+    { 
+        //
+    }
+
 
     private void ShowItemDetailWindow(int itemId)
     {
         _activeItemId = itemId;
-
-        StateHasChanged();
+        StateHasChanged();        
     }
 
     protected override async Task OnInitializedAsync()
