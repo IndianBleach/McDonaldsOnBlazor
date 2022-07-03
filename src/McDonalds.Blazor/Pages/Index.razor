@@ -73,8 +73,8 @@
                 @foreach (BasketItemDto item in basketItems)
                 {
                     <section class="col-12 d-flex align-items-center">
-                      <img src="/media/menuItems/@item.MenuItem.ImageSrcName" height="66" />
-                      <div>
+                      <img src="/media/menuItems/@item.MenuItem.ImageSrcName" height="60" />
+                      <div class="ps-1">
                         <label class="t-title-sm">@item.MenuItem.Name</label>
                         <br />
                         <span class="t-sm text-gray">
@@ -83,6 +83,7 @@
                         </span>
                       </div>
                       <button
+                        @onclick="() => RemoveItemFromBasket(item)"
                         type="button"
                         class="ms-xl-1 btn-close btn-close-white"
                         aria-label="Close"
@@ -195,7 +196,12 @@
 
     private void SendBasketAfterPay()
     { 
-        //
+    //
+    }
+
+    private void RemoveItemFromBasket(BasketItemDto item)
+    {
+        basketItems.Remove(item);
     }
 
 
