@@ -22,6 +22,8 @@ builder.Services.AddStackExchangeRedisCache(opt =>
     opt.InstanceName = "McDonaldsRedis";    
 });
 
+builder.Services.AddDistributedMemoryCache();
+
 
 var app = builder.Build();
 
@@ -35,6 +37,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseSession();
 app.UseStaticFiles();
 
 app.UseRouting();

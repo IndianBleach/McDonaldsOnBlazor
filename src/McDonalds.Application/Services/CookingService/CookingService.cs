@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace McDonaldsOnWeb.Application.Services.CookingQueueService
 {
-    public class CookingQueueService : ICookingQueueService
+    public class CookingService : ICookingService
     {
         private readonly IDistributedCache _cashe;
-        public CookingQueueService(IDistributedCache cashe)
+        public CookingService(IDistributedCache cashe)
         {
             _cashe = cashe;
         }

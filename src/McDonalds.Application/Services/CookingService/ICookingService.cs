@@ -9,10 +9,9 @@ using System.Threading.Tasks;
 namespace McDonaldsOnWeb.Application.Services.CookingQueueService
 {   
     //redis
-    public interface ICookingQueueService
+    public interface ICookingService
     {
-        public ICollection<CookingQueueItem> GetCookingQueue();
-        public void PushNumberToQueue();
-        public void RemoveNumberFromQueue();
+        void CookingOrderItems();
+        void NotifyItemDone();
     }
 }

@@ -98,7 +98,7 @@
                       @basketItems.Sum(x => x.MenuItem.Price) Руб.
                       </span>
                  </label>
-                <button class="mt-3 col-12 btn btn-primary radius-md">
+                <button @onclick="PayBasketStartCooking" class="mt-3 col-12 btn btn-primary radius-md">
                   Оплатить
                 </button>
               </div>
@@ -194,9 +194,15 @@
 @code {
 
 
-    private void SendBasketAfterPay()
+    private void OrderPayment()
     { 
-    //
+        //add to queue
+        //send basket to cooking
+
+        // *queueNumber, *basketItems
+
+        // generating OrderGuid
+
     }
 
     private void RemoveItemFromBasket(BasketItemDto item)
